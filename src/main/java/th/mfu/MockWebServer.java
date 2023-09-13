@@ -16,35 +16,39 @@ public class MockWebServer implements Runnable {
 
         // TODO Create a server socket bound to specified port
         try(ServerSocket serverSocket = new ServerSocket(port)) {
-        System.out.println("Mock Web Server running on port " + port + "...");
+            System.out.println("Mock Web Server running on port port" + port);
 
-        while (true) {
-            // TODO Accept incoming client connections
-            Socket clientSocket = serverSocket.accept();
+            while (true) {
+                // TODO Accept incoming client connections
+                Socket clientSocket = serverSocket.accept();
 
-            // TODO Create input and output streams for the client socket
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            // TODO: Read the request from the client using BufferedReader
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                // TODO Create input and output streams for the client socket           
+                //PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+                // TODO: Read the request from the client using BufferedReader
+                //BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-            // TODO: send a response to the client
-            String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
-                    + "<html><body>Hello, Web! on Port " + port + "</body></html>";
-                    out.println(response + "<html><body><h1>Hello From Server</h1></body></html>");
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Received from client: " + inputLine);
-                out.println("Client says: " + inputLine);
-                    }
-            // TODO: Close the client socket
-        }
-
-        } catch (IOException e) {
+                // TODO: send a response to the client
+                String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
+                        + "<html><body>Hello, Web! on Port " + port + "</body></html>";
+                        System.out.println(response + "<html><body><h1>Hello From Server</h1></body></html>");
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println("Received from client: " + inputLine);
+                    System.out.println("Client says: " + inputLine);
+                        }
+                // TODO: Close the client socket
+                in.close();
+                out.close();
+                clientSocket.close();
+            }
+        }catch (IOException e) {
             System.err.println("Error occurred: " + e.getMessage());
         }
      
         
-
     }
 
     public static void main(String[] args) {
